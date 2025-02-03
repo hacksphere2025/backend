@@ -1,7 +1,7 @@
-import { isAppError, UnkownError } from "./error";
-import {logger} from  "./logger.util";
+const { isAppError, UnkownError } = require("./error")
+const { logger } = require("./logger")
 
-export const GeneralErrorHandler = (error, errorMsg) => {
+module.exports.GeneralErrorHandler = (error, errorMsg) => {
   if (isAppError(error)) {
     return error;
   }

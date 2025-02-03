@@ -1,6 +1,6 @@
 const authService = require("../../Services/auth/auth.service");
 
-exports.userLogin = async (req, res) => {
+const userLogin = async (req, res) => {
   try {
     console.log(req.body);
     const { nameOrEmail, password } = req.body;
@@ -16,3 +16,7 @@ exports.userLogin = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+module.exports = {
+  userLogin
+}

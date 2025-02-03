@@ -1,5 +1,4 @@
 const { AppError, NotFoundError, isAppError } = require("../../utils/error.js");
-const logger = require("../../utils/logger.js");
 const GeneralResponse = require("../../utils/response.js");
 const { getUserByNameOrEmail } = require("../../Repository/auth/auth.repository.js");
 

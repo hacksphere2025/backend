@@ -1,4 +1,5 @@
-import { createLogger, format, transports } from 'winston';
+const { createLogger, format, transports } = require('winston');
+
 
 const { combine, timestamp, printf, colorize } = format;
 
@@ -6,7 +7,7 @@ const customFormat = printf(({ level, message, timestamp }) => {
   return `${timestamp} [${level}]: ${message}`;
 });
 
-const logger = createLogger({
+module.exports.logger = createLogger({
   level: 'info',
   format: combine(
     timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
@@ -23,5 +24,3 @@ const logger = createLogger({
     })
   ]
 });
-
-export default logger;

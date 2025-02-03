@@ -1,5 +1,5 @@
-export class AppError extends Error {
-constructor(statusCode, message, isOperational = true) {
+class AppError extends Error {
+  constructor(statusCode, message, isOperational = true) {
     super(message);
 
     Object.setPrototypeOf(this, new.target.prototype);
@@ -8,88 +8,100 @@ constructor(statusCode, message, isOperational = true) {
     this.message = message;
 
     if (Error.captureStackTrace) {
-        Error.captureStackTrace(this, this.constructor);
+      Error.captureStackTrace(this, this.constructor);
     } else {
-        this.stack = new Error(message).stack;
+      this.stack = new Error(message).stack;
     }
-}
+  }
 
-format() {
+  format() {
     const errorResponse = {
-        statusCode: this.statusCode,
-        message: this.message,
-        isOperational: this.isOperational,
-        success: false
+      statusCode: this.statusCode,
+      message: this.message,
+      isOperational: this.isOperational,
+      success: false
     };
 
     if (this.errors && this.errors.length > 0) {
-        errorResponse.errors = this.errors;
+      errorResponse.errors = this.errors;
     }
 
     if (process.env.NODE_ENV === 'development') {
-        errorResponse.stack = this.stack;
+      errorResponse.stack = this.stack;
     }
 
     return errorResponse;
-}
+  }
 }
 
-export class NotFoundError extends AppError {
-constructor(message = 'Resource not found') {
+class NotFoundError extends AppError {
+  constructor(message = 'Resource not found') {
     super(404, message);
     this.name = 'NotFoundError';
-}
+  }
 }
 
-export class InternalValidationError extends AppError {
-constructor(errorsOrMessage = 'Validation failed') {
+class InternalValidationError extends AppError {
+  constructor(errorsOrMessage = 'Validation failed') {
     if (Array.isArray(errorsOrMessage)) {
-        super(400, 'Validation failed');
-        this.errors = errorsOrMessage;
+      super(400, 'Validation failed');
+      this.errors = errorsOrMessage;
     } else {
-        super(400, errorsOrMessage);
+      super(400, errorsOrMessage);
     }
     this.name = 'InternalValidationError';
-}
+  }
 }
 
-export class UnauthorizedError extends AppError {
-constructor(message = 'Unauthorized') {
+class UnauthorizedError extends AppError {
+  constructor(message = 'Unauthorized') {
     super(401, message);
     this.name = 'UnauthorizedError';
-}
+  }
 }
 
-export class ForbiddenError extends AppError {
-constructor(message = 'Forbidden') {
+class ForbiddenError extends AppError {
+  constructor(message = 'Forbidden') {
     super(403, message);
     this.name = 'ForbiddenError';
-}
+  }
 }
 
-export class UserNotFoundError extends AppError {
-constructor(message = 'User not found') {
+class UserNotFoundError extends AppError {
+  constructor(message = 'User not found') {
     super(404, message);
     this.name = 'UserNotFoundError';
-}
+  }
 }
 
-export class UnkownError extends AppError {
-constructor(message = 'Unknown error', errorStack = '') {
+class UnknownError extends AppError {
+  constructor(message = 'Unknown error', errorStack = '') {
     super(500, message);
     this.errorStack = errorStack;
     this.name = 'InternalError';
-}
+  }
 }
 
-export function isAppError(error) {
-return (
+function isAppError(error) {
+  return (
     error instanceof AppError ||
     error instanceof NotFoundError ||
     error instanceof InternalValidationError ||
     error instanceof UnauthorizedError ||
     error instanceof ForbiddenError ||
     error instanceof UserNotFoundError ||
-    error instanceof UnkownError
-);
+    error instanceof UnknownError
+  );
 }
+
+
+module.exports = {
+  AppError,
+  NotFoundError,
+  InternalValidationError,
+  UnauthorizedError,
+  ForbiddenError,
+  UserNotFoundError,
+  UnknownError,
+  isAppError
+};

@@ -15,7 +15,7 @@ const messageSchema = mongoose.Schema({
   },
   message: {
     type: String,
-    required: true 
+    required: true
   },
   time: {
     type: Date,
@@ -23,4 +23,7 @@ const messageSchema = mongoose.Schema({
   }
 });
 
-export const messageSchema = mongoose.mode("Message", messageSchema);
+const message = mongoose.mode("Message", messageSchema);
+module.exports = {
+  message
+}

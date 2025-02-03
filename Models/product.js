@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 const SchemaTypes = mongoose.Schema.Types;
-const user = require("../Models/user");
-const category = require("../Models/category");
 
 const productSchema = mongoose.Schema({
   name: {
@@ -10,7 +8,7 @@ const productSchema = mongoose.Schema({
   },
   category: {
     type: SchemaTypes.ObjectId,
-    ref: category, 
+    ref: "Category",
     required: true,
   },
   image: {
@@ -19,7 +17,7 @@ const productSchema = mongoose.Schema({
   },
   seller_id: {
     type: SchemaTypes.ObjectId,
-    ref: user,
+    ref: "User",
     required: true,
   },
   latitude: {
@@ -46,4 +44,7 @@ const productSchema = mongoose.Schema({
   }
 });
 
-export const product = mongoose.model("Product", productSchema);
+const product = mongoose.model("Product", productSchema);
+module.exports = {
+  product
+}

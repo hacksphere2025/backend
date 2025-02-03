@@ -1,23 +1,20 @@
 const mongoose = require("mongoose");
 const SchemaTypes = mongoose.Schema.Types;
-const product = require("../Models/product");
-const user = require("../Models/user");
-const message = require("../Models/Message");
 
 const chatSessionSchema = mongoose.Schema({
   product_id: {
     type: SchemaTypes.ObjectId,
-    ref: product,
+    ref: "Product",
     required: true,
   },
   seller_id: {
     type: SchemaTypes.ObjectId,
-    ref: user,
+    ref: "User",
     required: true
   },
   buyer_id: {
     type: SchemaTypes.ObjectId,
-    ref: user,
+    ref: "User",
     required: true
   },
   date: {
@@ -26,10 +23,14 @@ const chatSessionSchema = mongoose.Schema({
   },
   messages: [
     {
-      ref: message,
+      ref: "Message",
       type: SchemaTypes.ObjectId,
     }
   ]
 });
 
-export const chatSession = mongoose.model("ChatSession", chatSessionSchema);
+const chatSession = mongoose.model("ChatSession", chatSessionSchema);
+module.exports = {
+  chatSession
+}
+
