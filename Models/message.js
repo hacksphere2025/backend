@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const SchemaTypes = mongoose.Schema.Types;
-const user = require("../Models/user");
 
 const messageSchema = mongoose.Schema({
   from: {
