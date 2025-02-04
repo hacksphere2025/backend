@@ -15,6 +15,19 @@ const updateUserLocation = async (req, res) => {
   }
 }
 
+const getUserDetails = async (req, res) => {
+  try {
+    const email = req.user.email;
+    const response = await userService.getUserDetails(email);
+    return res.status(response.statusCode).json(response)
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+
+  }
+}
+
 module.exports = {
-  updateUserLocation
+  updateUserLocation,
+  getUserDetails
 }

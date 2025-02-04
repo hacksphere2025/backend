@@ -12,3 +12,13 @@ module.exports.updateLocation = async (email, latitude, longtitude) => {
     throw new AppError(500, "Error during location update");
   }
 }
+
+module.exports.getUserDetails = async (email) => {
+  try {
+    const response = await userRepository.getUserByEmail(email);
+    return new GeneralResponse(true, response, 200, "Fetched Deatails Successfully");
+  } catch (error) {
+    console.log(error)
+    throw new AppError(500, "Error during location update");
+  }
+}
