@@ -2,14 +2,19 @@ const mongoose = require("mongoose");
 const SchemaTypes = mongoose.Schema.Types;
 
 const productSchema = mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
   category: {
     type: SchemaTypes.ObjectId,
     ref: "Category",
     required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    min: 1,
   },
   image: {
     type: String,
@@ -20,14 +25,6 @@ const productSchema = mongoose.Schema({
     ref: "User",
     required: true,
   },
-  latitude: {
-    type: Number,
-    required: true,
-  },
-  longitude: {
-    type: Number,
-    required: true,
-  },
   freshness: {
     type: Number,
     enum: [0, 1, 2, 3, 4],
@@ -35,16 +32,16 @@ const productSchema = mongoose.Schema({
   },
   harvest_date: {
     type: Date,
-    required: true
-  },
-  quantity: {
-    type: Number,
     required: true,
-    min: 1
+  },
+  location:{
+    type: SchemaTypes.ObjectId,
+    ref: "location",
+    required: true,
   }
 });
 
 const product = mongoose.model("Product", productSchema);
 module.exports = {
-  product
-}
+  product,
+};

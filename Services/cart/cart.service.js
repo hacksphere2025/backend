@@ -1,4 +1,4 @@
-const cartRepository = require("../../Repository/cart/cart.repository")
+const cartRepository = require("../../Repository/consumer/cart.repository")
 const { AppError } = require("../../utils/error")
 
 module.exports.createCart = async () => {
