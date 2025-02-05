@@ -16,8 +16,7 @@ module.exports.handleLogin = async (email, password) => {
       return new GeneralResponse(false, null, 402, "Password Does Not Match");
     }
     const data = {
-      token: createJWT(email),
-      user: user,
+      token: createJWT(email)
     };
     return new GeneralResponse(true, data, 200, "User Login Successfully");
   } catch (error) {

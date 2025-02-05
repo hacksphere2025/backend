@@ -40,7 +40,7 @@ const productSchema = mongoose.Schema({
   },
   location: {
     type: SchemaTypes.ObjectId,
-    ref: "location",
+    ref: "Location",
     required: true,
   },
 });

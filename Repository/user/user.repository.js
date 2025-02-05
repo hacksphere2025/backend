@@ -36,19 +36,7 @@ exports.updateUserLocation = async (email, latitude, longitude) => {
 };
 
 exports.getUserByEmail = async (email) => {
-  return await user
-    .findOne({ email: email })
-    .populate("cart",'-__v')
-    .populate({
-      path: "products",
-      populate: {
-        path: "location",
-        model: "Location",
-        'select': 'address location'
-      },
-      'select': 'category name quantity freshness price',
-    })
-    .exec();
+  return await user.findOne({ email: email });
 };
 
 exports.getUserIdByEmail = async (email) => {
