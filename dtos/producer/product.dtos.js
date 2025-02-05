@@ -8,6 +8,7 @@ const { Types } = require("mongoose");
  * @property {string} image
  * @property {string} seller_id
  * @property {number} freshness
+ * @property {number} price
  * @property {Date} harvest_date
  * @property {Types.ObjectId} location
  */
@@ -20,6 +21,7 @@ const { Types } = require("mongoose");
  * @property {string} [image]
  * @property {string} seller_id
  * @property {number} freshness
+ * @property {number} price
  * @property {string} harvest_date
  * @property {Types.ObjectId} location
  */
@@ -32,6 +34,7 @@ const { Types } = require("mongoose");
  * @property {string} [image]
  * @property {string} [seller_id]
  * @property {number} [freshness]
+ * @property {number} [price]
  * @property {string} [harvest_date]
  * @property {Types.ObjectId} [location]
  */
@@ -59,6 +62,7 @@ class CreateProductDTO {
     this.freshness = data.freshness;
     this.harvest_date = data.harvest_date;
     this.location = data.location;
+    this.price = data.price;
   }
 }
 
@@ -76,6 +80,7 @@ class UpdateProductDTO {
     if (data.freshness) this.freshness = data.freshness;
     if (data.harvest_date) this.harvest_date = data.harvest_date;
     if (data.location) this.location = data.location;
+    if (data.price) this.price = data.price;
   }
 }
 

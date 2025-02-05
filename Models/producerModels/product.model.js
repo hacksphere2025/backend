@@ -16,6 +16,10 @@ const productSchema = mongoose.Schema({
     required: true,
     min: 1,
   },
+  price: {
+    type: Number,
+    required: true,
+  },
   image: {
     type: String,
     required: true,
@@ -34,11 +38,11 @@ const productSchema = mongoose.Schema({
     type: Date,
     required: true,
   },
-  location:{
+  location: {
     type: SchemaTypes.ObjectId,
     ref: "location",
     required: true,
-  }
+  },
 });
 
 const product = mongoose.model("Product", productSchema);
