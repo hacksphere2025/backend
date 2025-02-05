@@ -21,8 +21,18 @@ const insertProduct = async (data) => {
   await user.findByIdAndUpdate(data.seller_id, { $push: { products: newProduct._id } });
 };
 
+const findProductByString = async (name) => {
+  return await product.find({
+    $text: {
+      $search: name
+    }
+  }).populate("seller_id", "name")
+  .populate("category", "name")
+}
+
 module.exports = {
   getAllProductByUserId,
   insertProduct,
   getAllProduct,
+  findProductByString
 };

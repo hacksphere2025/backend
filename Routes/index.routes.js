@@ -6,6 +6,7 @@ const producerRouter = require("./producer/index.route");
 const router = express.Router();
 const locationRouter = require("./common/location.routes");
 const cartRouter = require("./common/cart.routes");
+const chatBotRouter = require("./chatbot.routes");
 
 router.use("/auth", authRouter);
 router.use("/cart", cartRouter);
@@ -13,4 +14,6 @@ router.use("/location", locationRouter);
 router.use("/category", categoryRouter);
 router.use("/user", userRouter);
 router.use("/producer", producerRouter);
+router.use("/chatbot", chatBotRouter);
+
 module.exports = router;
