@@ -1,22 +1,26 @@
 const axios = require("axios");
 const productRepository = require("../../Repository/producer/product/product.repository")
-
+const userRepository = require("../../Repository/user/user.repository")
 const mapping = {
   "AddProduct": {
-    "type": "add",
+    "type": "add_prod",
     "func": "sample"
   },
   "FindListedProduct": {
-    "type": "list",
-    "func": "sample"
+    "type": "list_prod_prod",
+    "func": productRepository.getAllProductByUserId
   },
   "UpdateListedProduct": {
-    "type": "list",
+    "type": "update_list_prod",
     "func": "sample"
   },
   "FindAllProducts": {
-    "type": "list",
+    "type": "list_cons",
     "func": productRepository.findProductByString
+  },
+  'None': {
+    "type": "none",
+    "func": "none"
   }
 }
 
@@ -39,9 +43,21 @@ const queryChatbot = async (req, res) => {
 
 
     const match = name.match(/^(\w+)\((.*)\)$/);
-    const functionCalled = mapping[match[1]];
-    const data = await functionCalled.func(match[2])
-
+    let functionCalled;
+    let data;
+    functionCalled = mapping[match[1]];
+    if (match[1] == "FindAllProducts") {
+      data = await functionCalled.func(match[2]);
+      console.log(match[2])
+    }
+    else if (match[1] == "FindListedProduct") {
+      const user_id = await userRepository.getUserByEmail(email)
+      data = await functionCalled.func(user_id);
+      console.log(data)
+    }
+    else {
+      data = null
+    }
     return res.status(200).json({
       message: message,
       data: {
