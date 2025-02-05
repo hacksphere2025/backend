@@ -2,7 +2,6 @@ const { cart } = require("../../Models/consumerModels/cart.models");
 const { user } = require("../../Models/authModels/user.model");
 
 const createCart = async (dto) => {
-    console.log(dto);
   const newCart = new cart(dto);
   await newCart.save();
   await user.findByIdAndUpdate(dto.user, { $push: { cart: newCart._id } });

@@ -8,6 +8,10 @@ const getAllProduct = async () => {
     .populate("seller_id", "name email");
 };
 
+const getUserByProductId = async (product_id) => {
+  return await product.findById(product_id).select("seller_id");
+};
+
 const getAllProductByUserId = async (seller_id) => {
   return await product
     .find({ seller_id: seller_id })
@@ -41,4 +45,5 @@ module.exports = {
   insertProduct,
   getAllProduct,
   findProductByString,
+  getUserByProductId,
 };

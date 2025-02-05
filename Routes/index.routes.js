@@ -7,8 +7,10 @@ const router = express.Router();
 const locationRouter = require("./common/location.routes");
 const cartRouter = require("./common/cart.routes");
 const chatBotRouter = require("./chatbot.routes");
+const orderRouter = require("./consumer/order.routes");
 
 router.use("/auth", authRouter);
+router.use("/order", orderRouter);
 router.use("/cart", cartRouter);
 router.use("/location", locationRouter);
 router.use("/category", categoryRouter);

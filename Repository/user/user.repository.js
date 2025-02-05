@@ -43,3 +43,5 @@ exports.getUserIdByEmail = async (email) => {
   const data = await user.findOne({ email: email });
   return data._id.toString();
 };
+
+
