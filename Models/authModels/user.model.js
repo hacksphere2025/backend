@@ -19,14 +19,6 @@ const userSchema = mongoose.Schema({
     type: Number,
     require: true,
   },
-  latitude: {
-    type: Number,
-    require: true,
-  },
-  longitude: {
-    type: Number,
-    require: true,
-  },
   products: [
     {
       type: SchemaTypes.ObjectId,
@@ -37,9 +29,9 @@ const userSchema = mongoose.Schema({
     {
       type: SchemaTypes.ObjectId,
       ref: "Cart",
-      require: true,
     },
   ],
+  order: [{ type: SchemaTypes.ObjectId, ref: "Order" }],
 });
 
 const user = mongoose.model("User", userSchema);

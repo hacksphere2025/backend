@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { AppError } = require("../../utils/error.js");
 const { GeneralResponse } = require("../../utils/response.js");
-const cartService = require("../cart/cart.service.js");
 const userRepository = require("../../Repository/user/user.repository.js");
 
 module.exports.handleLogin = async (email, password) => {
@@ -16,7 +15,7 @@ module.exports.handleLogin = async (email, password) => {
       return new GeneralResponse(false, null, 402, "Password Does Not Match");
     }
     const data = {
-      token: createJWT(email)
+      token: createJWT(email),
     };
     return new GeneralResponse(true, data, 200, "User Login Successfully");
   } catch (error) {
@@ -30,9 +29,7 @@ module.exports.handleCreateUser = async (
   email,
   password,
   rePassword,
-  phone_no,
-  latitude,
-  longitude
+  phone_no
 ) => {
   try {
     if (await userRepository.userExists(email)) {
@@ -46,16 +43,7 @@ module.exports.handleCreateUser = async (
         "Password and Re-password doesnt match"
       );
     }
-    const cart = await cartService.createCart();
-    await userRepository.createUser(
-      name,
-      email,
-      password,
-      phone_no,
-      latitude,
-      longitude,
-      cart.insertedId
-    );
+    await userRepository.createUser(name, email, password, phone_no);
     const data = {
       token: createJWT(email),
     };

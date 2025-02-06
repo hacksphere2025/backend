@@ -1,22 +1,11 @@
 const { user } = require("../../Models/authModels/user.model");
 
-exports.createUser = async (
-  name,
-  email,
-  password,
-  phone_no,
-  latitude,
-  longitude,
-  cart
-) => {
+exports.createUser = async (name, email, password, phone_no) => {
   const newUser = new user({
     name,
     email,
     password,
     phone_no,
-    latitude,
-    longitude,
-    cart,
   });
   return await newUser.save();
 };
@@ -43,5 +32,3 @@ exports.getUserIdByEmail = async (email) => {
   const data = await user.findOne({ email: email });
   return data._id.toString();
 };
-
-
