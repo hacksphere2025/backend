@@ -1,15 +1,28 @@
 const express = require("express");
 const { authMiddleware } = require("../../Middleware/middleware");
-const {
-  createLocationController,
-  getAllLocationController,
-  getLocationByIdController,
-} = require("../../Controller/users/location.controller");
+const locationController = require("../../Controller/users/location.controller");
 
 const locationsRouter = express.Router();
 
-locationsRouter.post("/add", authMiddleware, createLocationController);
-locationsRouter.get("/", authMiddleware, getAllLocationController);
-locationsRouter.get("/id", authMiddleware, getLocationByIdController);
+locationsRouter.post(
+  "/add",
+  authMiddleware,
+  locationController.createLocation,
+);
+locationsRouter.get(
+  "/",
+  authMiddleware,
+  locationController.getAllLocation,
+);
+locationsRouter.get(
+  "/id",
+  authMiddleware,
+  locationController.getLocationById,
+);
+locationsRouter.get(
+  "/user",
+  authMiddleware,
+  locationController.getLocationByUserId,
+);
 
 module.exports = locationsRouter;

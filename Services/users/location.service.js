@@ -9,7 +9,7 @@ module.exports.createLocation = async (dto) => {
       true,
       null,
       201,
-      "Location created successfully"
+      "Location created successfully",
     );
   } catch (error) {
     console.log(error);
@@ -21,6 +21,16 @@ module.exports.getAllLocation = async () => {
   try {
     const locations = await locationRepository.getAllLocation();
     return new GeneralResponse(true, locations, 200, "All Locations");
+  } catch (error) {
+    console.log(error);
+    throw new AppError(500, "Error during fetching locations");
+  }
+};
+
+module.exports.getAllLocationByUserId = async (dto) => {
+  try {
+    const locations = await locationRepository.getAllLocationByUserId(dto);
+    return new GeneralResponse(true, locations, 200, "All Locations By UserID");
   } catch (error) {
     console.log(error);
     throw new AppError(500, "Error during fetching locations");

@@ -4,9 +4,11 @@ const {
 } = require("../../dtos/users/locations.dtos");
 const locationService = require("../../Services/users/location.service");
 
-const createLocationController = async (req, res) => {
+const createLocation = async (req, res) => {
   try {
-    const locationDTO = new CreateAddressDTO(req.body);
+    const userId = req.user.id;
+    console.log(userId);
+    const locationDTO = new CreateAddressDTO({ ...req.body, userId: userId });
     const location = await locationService.createLocation(locationDTO);
     return res.status(location.statusCode).json(location);
   } catch (error) {
@@ -15,7 +17,7 @@ const createLocationController = async (req, res) => {
   }
 };
 
-const getAllLocationController = async (req, res) => {
+const getAllLocation = async (req, res) => {
   try {
     const locations = await locationService.getAllLocation();
     return res.status(locations.statusCode).json(locations);
@@ -25,7 +27,7 @@ const getAllLocationController = async (req, res) => {
   }
 };
 
-const getLocationByIdController = async (req, res) => {
+const getLocationById = async (req, res) => {
   try {
     const locationIdDTO = new AddressIdDTO(req.body);
     const location = await locationService.getLocationById(locationIdDTO);
@@ -36,8 +38,22 @@ const getLocationByIdController = async (req, res) => {
   }
 };
 
+const getLocationByUserId = async (req, res) => {
+  try {
+    console.log(req.user.id);
+    const locationIdDTO = new AddressIdDTO({ id: req.user.id });
+    const location =
+      await locationService.getAllLocationByUserId(locationIdDTO);
+    return res.status(location.statusCode).json(location);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 module.exports = {
-  createLocationController,
-  getAllLocationController,
-  getLocationByIdController,
+  createLocation,
+  getAllLocation,
+  getLocationById,
+  getLocationByUserId,
 };

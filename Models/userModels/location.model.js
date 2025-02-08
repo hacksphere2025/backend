@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 const SchemaTypes = mongoose.Schema.Types;
 
 const locationSchema = mongoose.Schema({
+  userId: {
+    ref: "User",
+    type: SchemaTypes.ObjectId,
+    required: true,
+  },
   address: {
     type: SchemaTypes.String,
     required: true,
@@ -14,9 +19,9 @@ const locationSchema = mongoose.Schema({
     type: SchemaTypes.String,
     required: true,
   },
-  pincode:{
+  pincode: {
     type: SchemaTypes.Number,
-    required: true
+    required: true,
   },
   country: {
     type: SchemaTypes.String,

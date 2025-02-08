@@ -4,6 +4,6 @@ const { queryChatbot } = require("../../Controller/users/chatbot.controller");
 
 const chatBotRouter = express.Router();
 
-chatBotRouter.get('/query', authMiddleware, queryChatbot);
+chatBotRouter.post('/query', authMiddleware, queryChatbot);
 
 module.exports = chatBotRouter

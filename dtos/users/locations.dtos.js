@@ -24,7 +24,7 @@ const { Types } = require("mongoose");
  * @property {string} city
  * @property {string} state
  * @property {number} pincode
- * @property {Types.ObjectId} user
+ * @property {Types.ObjectId} userId
  * @property {Location} location
  */
 
@@ -63,11 +63,11 @@ class CreateAddressDTO {
    * @param {ICreateAddress} data
    */
   constructor(data) {
+    this.userId = data.userId;
     this.address = data.address;
     this.city = data.city;
     this.state = data.state;
     this.pincode = data.pincode;
-    this.user = data.user;
     this.location = new LocationPointsDto(data.location);
   }
 }
@@ -109,7 +109,7 @@ class AddressIdDTO {
    * @param {IGetAddress} data
    */
   constructor(data) {
-    this._id = new Types.ObjectId(data._id);
+    this._id = data.id;
   }
 }
 

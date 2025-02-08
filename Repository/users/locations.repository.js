@@ -12,3 +12,10 @@ exports.getAllLocation = async () => {
 exports.getLocationById = async (id) => {
   return await location.findById(id);
 };
+
+exports.getAllLocationByUserId = async (id) => {
+  console.log(id)
+  const data = await location.find({ userId: id._id });
+  console.log(data);
+  return data;
+};
