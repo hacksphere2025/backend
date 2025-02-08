@@ -1,13 +1,13 @@
 const express = require("express");
 const authRouter = require("./auth/auth.routes");
-const userRouter = require("./user.routes");
-const categoryRouter = require("./common/category.routes");
-const producerRouter = require("./producer/index.route");
+const userRouter = require("./user/user.routes");
+const categoryRouter = require("./user/category.routes");
 const router = express.Router();
-const locationRouter = require("./common/location.routes");
-const cartRouter = require("./common/cart.routes");
-const chatBotRouter = require("./chatbot.routes");
-const orderRouter = require("./consumer/order.routes");
+const locationRouter = require("./user/location.routes");
+const cartRouter = require("./user/cart.routes");
+const chatBotRouter = require("./user/chatbot.routes");
+const orderRouter = require("./user/order.routes");
+const productRouter = require("./user/product.routes");
 
 router.use("/auth", authRouter);
 router.use("/order", orderRouter);
@@ -15,7 +15,7 @@ router.use("/cart", cartRouter);
 router.use("/location", locationRouter);
 router.use("/category", categoryRouter);
 router.use("/user", userRouter);
-router.use("/producer", producerRouter);
+router.use("/product", productRouter);
 router.use("/chatbot", chatBotRouter);
 
 module.exports = router;

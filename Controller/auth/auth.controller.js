@@ -2,6 +2,7 @@ const authService = require("../../Services/auth/auth.service");
 
 const userLogin = async (req, res) => {
   try {
+    console.log(req.body);
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -9,7 +10,6 @@ const userLogin = async (req, res) => {
         .status(401)
         .json({ message: "Both Email and Password fields are required" });
     }
-
     const response = await authService.handleLogin(email, password);
     return res.status(response.statusCode).json(response);
   } catch (error) {

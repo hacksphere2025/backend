@@ -4,7 +4,7 @@ module.exports.authMiddleware = (req, res, next) => {
   try {
     const token = req.header("Authorization").replace("Bearer ", "");
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = { email: decoded.email, id: decoded._id };
+    req.user = { email: decoded.email, id: decoded.id };
     next();
   } catch (error) {
     console.error(error);

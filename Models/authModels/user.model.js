@@ -31,6 +31,12 @@ const userSchema = mongoose.Schema({
       ref: "Cart",
     },
   ],
+  locations: [
+    {
+      type: SchemaTypes.ObjectId,
+      ref: "Location",
+    },
+  ],
   order: [{ type: SchemaTypes.ObjectId, ref: "Order" }],
 });
 
