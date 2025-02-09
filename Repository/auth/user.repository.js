@@ -20,7 +20,7 @@ exports.updateUserLocation = async (email, latitude, longitude) => {
     {
       email: email,
     },
-    { $set: { latitude: latitude, longitude: longitude } }
+    { $set: { latitude: latitude, longitude: longitude } },
   );
 };
 
@@ -28,16 +28,9 @@ exports.getUserByEmail = async (email) => {
   return await user.findOne({ email: email });
 };
 
-exports.getuserById = async (email) => {
+exports.getuserById = async (id) => {
   return await user
-    .findOne({ email: email })
-    // .populate("order")
-    .populate("cart",'-__v -user')
-    // .populate("products")
-    .select("-password -__v")
-    .exec();
-};
-exports.getUserIdByEmail = async (email) => {
-  const data = await user.findOne({ email: email });
-  return data._id.toString();
+    .findOne({ _id: id })
+    .select("-cart -order -products -__v -password -locations");
+  // .populate("products")
 };

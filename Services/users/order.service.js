@@ -7,13 +7,6 @@ const { CreateOrderDTO } = require("../../dtos/users/order.dtos");
 
 const handleAddOrder = async (data, id) => {
   try {
-    const sellerObjectId = await productRepository.getUserByProductId(
-      data.prouct_id
-    );
-    if (!sellerObjectId) {
-      return new GeneralResponse(false, null, 403, "Seller does not exist");
-    }
-    data.seller_id = sellerObjectId;
     data.buyer_id = id;
     const orderDTO = new CreateOrderDTO(data);
     const response = await orderRepository.addOrder(orderDTO);
@@ -21,7 +14,7 @@ const handleAddOrder = async (data, id) => {
       true,
       response,
       200,
-      "Order Created Successfully"
+      "Order Created Successfully",
     );
   } catch (error) {
     console.error(error);

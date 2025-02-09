@@ -11,7 +11,7 @@ const getAllProducts = async () => {
       true,
       data,
       200,
-      "Fetched Products Successfully"
+      "Fetched Products Successfully",
     );
   } catch (error) {
     logger.error(error);
@@ -21,17 +21,11 @@ const getAllProducts = async () => {
 
 const createProduct = async (data) => {
   try {
-    const sellerObjectId = await userRepository.getUserIdByEmail(
-      data.seller_id
-    );
-    if (!sellerObjectId) {
-      return new GeneralResponse(false, null, 403, "Seller does not exist");
-    }
-    data.seller_id = sellerObjectId;
     const [day, month, year] = data.harvest_date.split("-");
     const fullYear = year.length === 2 ? `20${year}` : year;
     const converted_harvest_date = new Date(fullYear, month - 1, day);
     data.harvest_date = converted_harvest_date.toISOString();
+    console.log(data)
     await productRepository.insertProduct(data);
     return new GeneralResponse(true, null, 200, "Product Created Successfully");
   } catch (error) {
@@ -48,7 +42,7 @@ const getAllProductsByEmailId = async (email) => {
       true,
       data,
       200,
-      "Fetched Products Successfully"
+      "Fetched Products Successfully",
     );
   } catch (error) {
     console.log(error);

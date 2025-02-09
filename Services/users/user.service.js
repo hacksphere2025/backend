@@ -12,15 +12,14 @@ module.exports.updateLocation = async (email, latitude, longtitude) => {
   }
 };
 
-module.exports.getUserDetails = async (email) => {
+module.exports.getUserDetails = async (id) => {
   try {
-    const response = await userRepository.getuserById(email);
-    
+    const response = await userRepository.getuserById(id);
     return new GeneralResponse(
       true,
       response,
       200,
-      "Fetched Deatails Successfully"
+      "Fetched Deatails Successfully",
     );
   } catch (error) {
     console.log(error);

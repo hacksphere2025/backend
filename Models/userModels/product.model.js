@@ -47,6 +47,10 @@ const productSchema = mongoose.Schema({
     ref: "Location",
     required: true,
   },
+  sold_qty: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const product = mongoose.model("Product", productSchema);

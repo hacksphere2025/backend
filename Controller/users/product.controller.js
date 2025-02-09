@@ -3,11 +3,11 @@ const productService = require("../../Services/users/product.service");
 
 const createProduct = async (req, res) => {
   try {
-    const email = req.user.email;
+    const id = req.user.id;
     console.log(req.body);
     const productDTO = new CreateProductDTO({
       ...req.body,
-      seller_id: email,
+      seller_id: id,
     });
     console.log(productDTO);
     const data = await productService.createProduct(productDTO);
