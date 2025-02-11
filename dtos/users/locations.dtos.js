@@ -44,6 +44,12 @@ const { Types } = require("mongoose");
  */
 
 /**
+ * @typedef {Object} DeleteAddress
+ * @property {string} id
+ * @property {string} user_id
+ */
+
+/**
  * @typedef {Object} IGetAddressByUser
  * @property {Types.ObjectId} user
  */
@@ -113,10 +119,22 @@ class AddressIdDTO {
   }
 }
 
+class DeleteAddressDTO {
+  /**
+   * @param {DeleteAddress} data
+   */
+
+  constructor(data) {
+    this.user_id = data.user_id;
+    this.id = data.id;
+  }
+}
+
 module.exports = {
   LocationPointsDto,
   CreateAddressDTO,
   UpdateAddressDTO,
   AddressResponseDTO,
   AddressIdDTO,
+  DeleteAddressDTO,
 };

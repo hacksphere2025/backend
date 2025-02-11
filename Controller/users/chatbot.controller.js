@@ -36,16 +36,20 @@ const queryChatbot = async (req, res) => {
       userType: userType,
     });
 
-    const message = response.data.message;
-    const name = response.data.name;
-
-    const match = name.match(/^(\w+)\((.*)\)$/);
+    const message = response.data.response.message;
+    const name = response.data.response.name;
+    console.log(message + " " + name);
+    const match = name.match(
+      /^(\w+)\(\[([^\]]+)\],\s*([^,]+),\s*([^,]+),\s*([^,]+)\)$/,
+    );
     let functionCalled;
     let data;
     functionCalled = mapping[match[1]];
     if (match[1] == "FindAllProducts") {
-      data = await functionCalled.func(match[2]);
-      console.log(match[2]);
+      const city = match[5] === "null" ? null : match[5]; // Corrected city assignment
+      const limit = match[4] === "null" ? null : parseInt(match[4]); // Corrected limit assignment
+      console.log(match[2], city, limit);
+      data = await productRepository.findProductByString(match[2], limit, city);
     } else if (match[1] == "FindListedProduct") {
       const user_id = await userRepository.getUserByEmail(email);
       data = await functionCalled.func(user_id);

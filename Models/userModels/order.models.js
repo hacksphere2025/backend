@@ -10,6 +10,11 @@ const orderSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  location: {
+    type: SchemaTypes.ObjectId,
+    ref: "Location",
+    required: true,
+  },
   seller_id: { type: SchemaTypes.ObjectId, ref: "User", required: true },
   buyer_id: { type: SchemaTypes.ObjectId, ref: "User", required: true },
 });

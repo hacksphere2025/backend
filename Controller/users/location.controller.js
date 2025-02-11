@@ -1,6 +1,7 @@
 const {
   CreateAddressDTO,
   AddressIdDTO,
+  DeleteAddressDTO,
 } = require("../../dtos/users/locations.dtos");
 const locationService = require("../../Services/users/location.service");
 
@@ -51,9 +52,26 @@ const getLocationByUserId = async (req, res) => {
   }
 };
 
+const deleteLocationById = async (req, res) => {
+  try {
+    console.log(req.user.id);
+    const deleteLocationDTO = new DeleteAddressDTO({
+      user_id: req.user.id,
+      id: req.body.id,
+    });
+    const location =
+      await locationService.deleteLocationById(deleteLocationDTO);
+    return res.status(location.statusCode).json(location);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   createLocation,
   getAllLocation,
   getLocationById,
   getLocationByUserId,
+  deleteLocationById,
 };
