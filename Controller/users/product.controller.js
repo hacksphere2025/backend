@@ -28,10 +28,9 @@ const getAllProducts = async (req, res) => {
   }
 };
 
-const getAllProductsByEmailId = async (req, res) => {
+const getAllProductsByUserId = async (req, res) => {
   try {
-    const email = req.user.email;
-    const data = await productService.getAllProductsByEmailId(email);
+    const data = await productService.getAllProductsByUserId(req.user.id);
     return res.status(data.statusCode).json(data);
   } catch (error) {
     console.error(error);
@@ -42,5 +41,5 @@ const getAllProductsByEmailId = async (req, res) => {
 module.exports = {
   getAllProducts,
   createProduct,
-  getAllProductsByEmailId,
+  getAllProductsByUserId,
 };

@@ -1,6 +1,7 @@
 /**
  * @typedef {Object} Iorder
  * @property {Types.ObjectId} buy_product
+ * @property {Types.ObjectId} location
  * @property {number} quantity
  * @property {string} unit
  * @property {Types.ObjectId} seller_id
@@ -13,6 +14,8 @@
  * @property {number} quantity
  * @property {string} seller_id
  * @property {string} buyer_id
+ * @property {string} location
+ *
  */
 
 /**
@@ -33,6 +36,7 @@ class CreateOrderDTO {
     this.quantity = data.quantity;
     this.buyer_id = data.buyer_id;
     this.seller_id = data.seller_id;
+    this.location = data.location;
   }
 }
 
@@ -45,7 +49,7 @@ class UpdateOrderDTO {
     this.quantity = data.quantity;
     this.buyer_id = data.buyer_id;
     this.seller_id = data.seller_id;
-    this.unit = data.unit;
+    this.location = data.location;
   }
 }
 

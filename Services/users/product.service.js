@@ -34,10 +34,9 @@ const createProduct = async (data) => {
   }
 };
 
-const getAllProductsByEmailId = async (email) => {
+const getAllProductsByUserId = async (id) => {
   try {
-    const userId = await userRepository.getUserIdByEmail(email);
-    const data = await productRepository.getAllProductByUserId(userId);
+    const data = await productRepository.getAllProductByUserId(id);
     return new GeneralResponse(
       true,
       data,
@@ -51,7 +50,7 @@ const getAllProductsByEmailId = async (email) => {
 };
 
 module.exports = {
-  getAllProductsByEmailId,
+  getAllProductsByUserId,
   getAllProducts,
   createProduct,
 };

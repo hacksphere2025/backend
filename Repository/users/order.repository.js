@@ -2,7 +2,6 @@ const { order } = require("../../Models/userModels/order.models");
 const { product } = require("../../Models/userModels/product.model");
 const { user } = require("../../Models/authModels/user.model");
 const mongoose = require("mongoose");
-const path = require("path");
 
 const addOrder = async (data) => {
   const session = await mongoose.startSession();
@@ -17,14 +16,14 @@ const addOrder = async (data) => {
       { _id: data.buyer_id },
       {
         $push: { order: newOrder._id },
-      },
+      }
     );
 
     await product.findOneAndUpdate(
       { _id: data.buy_product },
       {
         $inc: { sold_qty: data.quantity },
-      },
+      }
     );
   } catch (e) {
     await session.abortTransaction();
@@ -45,7 +44,8 @@ const getAllOrder = async () => {
       },
     })
     .select("product_id")
-    .select("quantity");
+    .select("quantity")
+    .exec();
 };
 
 const getAllOrdersByUserBuy = async (userId) => {
@@ -60,12 +60,20 @@ const getAllOrdersByUserBuy = async (userId) => {
         { path: "location", select: "-userId -__v" },
       ],
     })
+    .populate("location")
     .select("product_id")
-    .select("quantity");
+    .select("quantity")
+    .exec();
 };
 
 const getAllOrdersByUserSell = async (userId) => {
-  return await order.find({ seller_id: userId });
+  return await order
+    .find({ seller_id: userId })
+    .populate("product_id",'name')
+    .populate("buyer_id","name email")
+    .populate("location", "location address city state pincode")
+    .populate("seller_id", "name email")
+    .exec();
 };
 
 module.exports = {

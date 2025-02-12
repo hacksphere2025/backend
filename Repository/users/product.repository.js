@@ -11,8 +11,9 @@ const getAllProduct = async () => {
     .populate("location", "city state");
 };
 
-const getUserByProductId = async (product_id) => {
-  return await product.findById(product_id).select("seller_id");
+const getUserByProductId = async (id) => {
+  console.log(id);
+  return await product.findById(id);
 };
 
 const getAllProductByUserId = async (seller_id) => {
