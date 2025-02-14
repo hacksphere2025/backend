@@ -57,7 +57,7 @@ const getAllSessionByUser = async (userId) => {
     const session = await sessionRepository.getAllSessionByUser(userId);
     return new GeneralResponse(
       true,
-      session,
+      session[0].session,
       200,
       "Get All Session By User Succesfully",
     );

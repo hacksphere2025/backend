@@ -10,5 +10,6 @@ sessionRouter.get(
   authMiddleware,
   sessionController.getMessagesBySessionId,
 );
+sessionRouter.get("/", authMiddleware, sessionController.getAllSessionByUser);
 
 module.exports = sessionRouter;

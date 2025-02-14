@@ -53,7 +53,7 @@ const getMessageListBySession = async (sessionId) => {
 const getAllSessionByUser = async (userId) => {
   return await user
     .find({ _id: userId })
-    .populate("session")
+    .populate("session", "_id title time type")
     .select("session -_id")
     .exec();
 };
