@@ -25,11 +25,9 @@ const mapping = {
   },
 };
 
-const queryChatbot = async (req, res) => {
+const queryChatbot = async (request) => {
   try {
-    const email = req.user.email;
-
-    const { query, userType } = req.body;
+    const { query, userType, userId } = request;
 
     const response = await axios.post(process.env.CHATBOT_URL + "/query", {
       userQuery: query,
@@ -38,6 +36,16 @@ const queryChatbot = async (req, res) => {
 
     const message = response.data.response.message;
     const name = response.data.response.name;
+
+    if (name == "None()") {
+      return {
+        message: message,
+        data: {
+          type: "none",
+        },
+      };
+    }
+
     console.log(message + " " + name);
     const match = name.match(
       /^(\w+)\(\[([^\]]+)\],\s*([^,]+),\s*([^,]+),\s*([^,]+)\)$/,
@@ -51,22 +59,21 @@ const queryChatbot = async (req, res) => {
       console.log(match[2], city, limit);
       data = await productRepository.findProductByString(match[2], limit, city);
     } else if (match[1] == "FindListedProduct") {
-      const user_id = await userRepository.getUserByEmail(email);
-      data = await functionCalled.func(user_id);
+      data = await functionCalled.func(userId);
       console.log(data);
     } else {
       data = null;
     }
-    return res.status(200).json({
+    return {
       message: message,
       data: {
         type: functionCalled.type,
         data: data,
       },
-    });
+    };
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Internal Server Error" });
+    return { message: "Internal Server Error" };
   }
 };
 

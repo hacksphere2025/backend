@@ -31,6 +31,6 @@ exports.getUserByEmail = async (email) => {
 exports.getuserById = async (id) => {
   return await user
     .findOne({ _id: id })
+    .populate({ path: "session", select: "-message" })
     .select("-cart -order -products -__v -password -locations");
-  // .populate("products")
 };

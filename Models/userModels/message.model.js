@@ -3,12 +3,17 @@ const mongoose = require("mongoose");
 const messageSchema = mongoose.Schema({
   user: {
     type: String,
-    enum: ["user", "bot"],
     default: "user",
   },
   message: {
     type: String,
     required: true,
+  },
+  type: {
+    type: String,
+  },
+  data: {
+    type: Object,
   },
   time: {
     type: Date,
@@ -16,7 +21,7 @@ const messageSchema = mongoose.Schema({
   },
 });
 
-const message = mongoose.model("Message", messageSchema);
+const Message = mongoose.model("Message", messageSchema);
 module.exports = {
-  message,
+  Message,
 };

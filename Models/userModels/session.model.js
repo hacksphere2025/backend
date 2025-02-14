@@ -8,12 +8,16 @@ const sessionSchema = mongoose.Schema({
   message: [
     {
       ref: "Message",
-      type: SchemaTypes.ObjectId
+      type: SchemaTypes.ObjectId,
     },
   ],
   time: {
     type: Date,
     default: Date.now(),
+  },
+  type: {
+    type: String,
+    default: "buyer",
   },
 });
 

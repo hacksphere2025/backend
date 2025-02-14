@@ -1,42 +1,66 @@
-const { message } = require("../../Models/userModels/message.model");
 const { session } = require("../../Models/userModels/session.model");
+const { Message } = require("../../Models/userModels/message.model");
 const { user } = require("../../Models/authModels/user.model");
+const mongoose = require("mongoose");
 
-const addMessage = async (data) => {
-  const messageData = new message(data);
-  return await messageData.save();
+const createSessionByUser = async (data, userId) => {
+  const transaction = await mongoose.startSession();
+  transaction.startTransaction();
+  try {
+    const addTitleToSession = new session(data);
+    const sessionData = await addTitleToSession.save();
+    await user.updateOne(
+      { _id: userId },
+      {
+        $push: { session: addTitleToSession._id },
+      },
+    );
+    return sessionData;
+  } catch (e) {
+    await transaction.abortTransaction();
+    console.error(e);
+  }
 };
 
-const addTitleToSessionUser = async (data) => {
-  const addTitleToSession = new session(data);
-  return await addTitleToSession.save();
-};
-
-const pushMessageIdToSessionModel = async (messageId, sessionId) => {
-  await session.findByIdAndUpdate(sessionId, {
-    $push: { message: messageId },
-  });
-};
-
-const pushSessionIdToUserModel = async (sessionId, UserId) => {
-  return await user.findByIdAndUpdate(UserId, {
-    $push: { session: sessionId },
-  });
+const addMessageBySessionId = async (newMessage, sessionId) => {
+  const transaction = await mongoose.startSession();
+  transaction.startTransaction();
+  try {
+    const messageResponse = new Message(newMessage);
+    console.log(messageResponse);
+    await messageResponse.save();
+    await session.updateOne(
+      { _id: sessionId },
+      {
+        $push: { message: messageResponse._id },
+      },
+    );
+  } catch (e) {
+    await transaction.abortTransaction();
+    session.endSession();
+    console.error(e);
+  }
 };
 
 const getMessageListBySession = async (sessionId) => {
-  return await session.findById(sessionId).populate("message").exec();
+  return await session
+    .find({ _id: sessionId })
+    .populate("message")
+    .select("message")
+    .exec();
 };
 
 const getAllSessionByUser = async (userId) => {
-  return await user.findBy(userId).populate("session").select("session").exec();
+  return await user
+    .find({ _id: userId })
+    .populate("session")
+    .select("session -_id")
+    .exec();
 };
 
 module.exports = {
-  addMessage,
-  pushMessageIdToSessionModel,
-  pushSessionIdToUserModel,
+  addMessageBySessionId,
   getMessageListBySession,
   getAllSessionByUser,
-  addTitleToSessionUser,
+  createSessionByUser,
 };

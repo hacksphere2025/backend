@@ -1,22 +1,30 @@
+const { queryChatbot } = require("../../Controller/users/chatbot.controller");
 const sessionRepository = require("../../Repository/users/session.repository");
 const { AppError } = require("../../utils/error");
 const { logger } = require("../../utils/logger");
 const { GeneralResponse } = require("../../utils/response");
 
-const addMessage = async (data, sessionId) => {
+const addMessage = async (data, sessionId, userId) => {
   try {
-    const response = await sessionRepository.addMessage(data);
-    const pushService = await sessionRepository.pushMessageIdToSessionModel(
-      response._id,
-      sessionId
+    await sessionRepository.addMessageBySessionId(data, sessionId);
+
+    const chatbotResponse = await queryChatbot({
+      query: data.message,
+      userType: "Consumer",
+      userId: userId,
+    });
+
+    await sessionRepository.addMessageBySessionId(
+      {
+        user: "bot",
+        message: chatbotResponse.message,
+        type: chatbotResponse.data.type,
+        data: chatbotResponse.data.data,
+      },
+      sessionId,
     );
-    console.log(pushService);
-    return new GeneralResponse(
-      true,
-      response,
-      200,
-      "Added Message Succesfully"
-    );
+
+    return new GeneralResponse(true, chatbotResponse, 200, "Sucess");
   } catch (error) {
     logger.error(error);
     return new AppError(500, "Error during add Message");
@@ -25,24 +33,18 @@ const addMessage = async (data, sessionId) => {
 
 const createNewSession = async (data, userId) => {
   try {
-    const message = await sessionRepository.addMessage(data.message);
     const sessionData = {
       title: data.title,
-      message: message._id,
     };
-    const sessionResponse = await sessionRepository.addTitleToSessionUser(
-      sessionData
+    const sessionResponse = await sessionRepository.createSessionByUser(
+      sessionData,
+      userId,
     );
-    const userResponse = await sessionRepository.pushSessionIdToUserModel(
-      sessionResponse._id,
-      userId
-    );
-    console.log(userResponse);
     return new GeneralResponse(
       true,
       sessionResponse,
       200,
-      "Added Session Succesfully"
+      "Added Session Succesfully",
     );
   } catch (error) {
     console.log(error);
@@ -57,10 +59,26 @@ const getAllSessionByUser = async (userId) => {
       true,
       session,
       200,
-      "Get All Session By User Succesfully"
+      "Get All Session By User Succesfully",
     );
   } catch (error) {
-    logger.error(error);
+    console.error(error);
+    return new AppError(500, "Error during get All Session By User");
+  }
+};
+
+const getMessagesBySessionId = async (sessionId) => {
+  try {
+    const messages = await sessionRepository.getMessageListBySession(sessionId);
+    console.log(messages);
+    return new GeneralResponse(
+      true,
+      messages[0],
+      200,
+      "Get all messages by sessionId Sucess",
+    );
+  } catch (error) {
+    console.error(error);
     return new AppError(500, "Error during get All Session By User");
   }
 };
@@ -69,4 +87,5 @@ module.exports = {
   addMessage,
   createNewSession,
   getAllSessionByUser,
+  getMessagesBySessionId,
 };
