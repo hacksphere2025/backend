@@ -3,7 +3,7 @@ const { AppError } = require("../../utils/error.js");
 const { GeneralResponse } = require("../../utils/response.js");
 const userRepository = require("../../Repository/auth/user.repository.js");
 
-module.exports.handleLogin = async (email, password) => {
+module.exports.handleLogin = async (email, password, type) => {
   try {
     const user = await userRepository.getUserByEmail(email);
 
@@ -15,7 +15,7 @@ module.exports.handleLogin = async (email, password) => {
       return new GeneralResponse(false, null, 402, "Password Does Not Match");
     }
     const data = {
-      token: createJWT(user.email, user._id),
+      token: createJWT(user.email, user._id, type),
     };
     return new GeneralResponse(true, data, 200, "User Login Successfully");
   } catch (error) {
@@ -54,9 +54,13 @@ module.exports.handleCreateUser = async (
   }
 };
 
-const createJWT = (email,id) => {
-  const token = jwt.sign({ email: email, id: id }, process.env.JWT_SECRET, {
-    expiresIn: "1hr",
-  });
+const createJWT = (email, id, type) => {
+  const token = jwt.sign(
+    { email: email, id: id, type: type },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "1hr",
+    }
+  );
   return token;
 };
