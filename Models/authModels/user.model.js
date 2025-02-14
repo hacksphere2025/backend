@@ -38,6 +38,7 @@ const userSchema = mongoose.Schema({
     },
   ],
   order: [{ type: SchemaTypes.ObjectId, ref: "Order" }],
+  session: [{ type: SchemaTypes.ObjectId, ref: "Session" }],
 });
 
 const user = mongoose.model("User", userSchema);

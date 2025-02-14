@@ -1,5 +1,5 @@
 const { product } = require("../../Models/userModels/product.model");
-const { category } = require("../../Models/adminModels/category.model");
+const { category } = require("../../Models/userModels/category.model");
 const { user } = require("../../Models/authModels/user.model");
 const { location } = require("../../Models/userModels/location.model");
 
@@ -12,7 +12,6 @@ const getAllProduct = async () => {
 };
 
 const getUserByProductId = async (id) => {
-  console.log(id);
   return await product.findById(id);
 };
 

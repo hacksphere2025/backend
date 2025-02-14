@@ -6,12 +6,10 @@ const mongoose = require("mongoose");
 const addOrder = async (data) => {
   const session = await mongoose.startSession();
   session.startTransaction();
-
   try {
     console.log(data);
     const newOrder = new order(data);
     await newOrder.save();
-
     await user.findOneAndUpdate(
       { _id: data.buyer_id },
       {
