@@ -2,15 +2,15 @@ const authService = require("../../Services/auth/auth.service");
 
 const userLogin = async (req, res) => {
   try {
-    console.log(req.body);
-    const { email, password } = req.body;
-
-    if (!email || !password) {
+    const { email, password, type } = req.body;
+    if (!email || !password || !type) {
       return res
         .status(401)
-        .json({ message: "Both Email and Password fields are required" });
+        .json({
+          message: "Both email, password and userType fields are required",
+        });
     }
-    const response = await authService.handleLogin(email, password);
+    const response = await authService.handleLogin(email, password, type);
     return res.status(response.statusCode).json(response);
   } catch (error) {
     console.error(error);
