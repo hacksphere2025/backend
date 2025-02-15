@@ -4,13 +4,13 @@ const { AppError } = require("../../utils/error");
 const { logger } = require("../../utils/logger");
 const { GeneralResponse } = require("../../utils/response");
 
-const addMessage = async (data, sessionId, userId) => {
+const addMessage = async (data, sessionId, userId, userType) => {
   try {
     await sessionRepository.addMessageBySessionId(data, sessionId);
 
     const chatbotResponse = await queryChatbot({
       query: data.message,
-      userType: "Consumer",
+      userType: userType == "buyer" ? "Producer" : "Consumer",
       userId: userId,
     });
 
@@ -31,10 +31,11 @@ const addMessage = async (data, sessionId, userId) => {
   }
 };
 
-const createNewSession = async (data, userId) => {
+const createNewSession = async (data, userId, loginType) => {
   try {
     const sessionData = {
       title: data.title,
+      type: loginType,
     };
     const sessionResponse = await sessionRepository.createSessionByUser(
       sessionData,
@@ -52,12 +53,13 @@ const createNewSession = async (data, userId) => {
   }
 };
 
-const getAllSessionByUser = async (userId) => {
+const getAllSessionByUser = async (userId, type) => {
   try {
-    const session = await sessionRepository.getAllSessionByUser(userId);
+    const response = await sessionRepository.getAllSessionByUser(userId, type);
+    console.log(response);
     return new GeneralResponse(
       true,
-      session[0].session,
+      response.session,
       200,
       "Get All Session By User Succesfully",
     );

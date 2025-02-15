@@ -34,8 +34,8 @@ const queryChatbot = async (request) => {
       userType: userType,
     });
 
-    const message = response.data.response.message;
-    const name = response.data.response.name;
+    const message = response.data.message;
+    const name = response.data.name;
 
     if (name == "None()") {
       return {
@@ -47,16 +47,20 @@ const queryChatbot = async (request) => {
     }
 
     console.log(message + " " + name);
-    const match = name.match(
-      /^(\w+)\(\[([^\]]+)\],\s*([^,]+),\s*([^,]+),\s*([^,]+)\)$/,
-    );
+
+    const regex =
+      /^(\w+)\(\s?(\[[^\]]*\]|null|None|\[\]),\s?(\d+|null|None),\s?(\d+|null|None),\s?('[^']*'|null|None)\s?\)$/;
+    const match = name.match(regex);
+    console.log(match);
+
     let functionCalled;
     let data;
+
     functionCalled = mapping[match[1]];
+
     if (match[1] == "FindAllProducts") {
-      const city = match[5] === "null" ? null : match[5]; // Corrected city assignment
-      const limit = match[4] === "null" ? null : parseInt(match[4]); // Corrected limit assignment
-      console.log(match[2], city, limit);
+      const city = match[5] === "null" ? null : match[5]; // city
+      const limit = match[4] === "null" ? null : parseInt(match[4]); // limit
       data = await productRepository.findProductByString(match[2], limit, city);
     } else if (match[1] == "FindListedProduct") {
       data = await functionCalled.func(userId);
@@ -65,7 +69,7 @@ const queryChatbot = async (request) => {
       data = null;
     }
     return {
-      message: message,
+      message: message === undefined ? "" : message,
       data: {
         type: functionCalled.type,
         data: data,

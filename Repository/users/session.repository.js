@@ -50,14 +50,19 @@ const getMessageListBySession = async (sessionId) => {
     .exec();
 };
 
-const getAllSessionByUser = async (userId) => {
+const getAllSessionByUser = async (userId, type) => {
   return await user
-    .find({ _id: userId })
-    .populate("session", "_id title time type")
+    .findOne({
+      _id: userId,
+    })
+    .populate({
+      path: "session",
+      match: { type: type }, // Works only if "session" is an array of ObjectIds
+      select: "_id title time type",
+    })
     .select("session -_id")
     .exec();
 };
-
 module.exports = {
   addMessageBySessionId,
   getMessageListBySession,

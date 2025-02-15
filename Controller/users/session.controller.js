@@ -19,8 +19,13 @@ const addMessage = async (req, res) => {
 const createNewSession = async (req, res) => {
   try {
     const userId = req.user.id;
+    const loginType = req.user.type;
     const data = req.body;
-    const response = await sessionService.createNewSession(data, userId);
+    const response = await sessionService.createNewSession(
+      data,
+      userId,
+      loginType,
+    );
     return res.status(response.statusCode).json(response);
   } catch (error) {
     console.error(error);
@@ -31,7 +36,8 @@ const createNewSession = async (req, res) => {
 const getAllSessionByUser = async (req, res) => {
   try {
     const userId = req.user.id;
-    const response = await sessionService.getAllSessionByUser(userId);
+    const session = req.user.type;
+    const response = await sessionService.getAllSessionByUser(userId, session);
     return res.status(response.statusCode).json(response);
   } catch (error) {
     console.error(error);
