@@ -12,7 +12,7 @@ const updateUserLocation = async (req, res) => {
     const response = await userService.updateLocation(
       email,
       latitude,
-      longitude,
+      longitude
     );
     return res.status(response.statusCode).json(response);
   } catch (error) {
@@ -24,7 +24,8 @@ const updateUserLocation = async (req, res) => {
 const getUserDetails = async (req, res) => {
   try {
     const id = req.user.id;
-    const response = await userService.getUserDetails(id);
+    const type = req.user.type;
+    const response = await userService.getUserDetails(id, type);
     return res.status(response.statusCode).json(response);
   } catch (error) {
     console.error(error);

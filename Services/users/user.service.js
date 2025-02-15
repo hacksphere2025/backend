@@ -12,14 +12,19 @@ module.exports.updateLocation = async (email, latitude, longtitude) => {
   }
 };
 
-module.exports.getUserDetails = async (id) => {
+module.exports.getUserDetails = async (id, type) => {
   try {
-    const response = await userRepository.getuserById(id);
+    let response = await userRepository.getuserById(id);
+    // response["loginType"] = type;
+    response = {
+      ...response._doc,
+      loginType: type,
+    };
     return new GeneralResponse(
       true,
       response,
       200,
-      "Fetched Deatails Successfully",
+      "Fetched Deatails Successfully"
     );
   } catch (error) {
     console.log(error);
