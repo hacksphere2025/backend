@@ -8,6 +8,7 @@ const addMessage = async (req, res) => {
       data,
       sessionId,
       req.user.id,
+      req.user.type,
     );
     return res.status(response.statusCode).json(response.data);
   } catch (error) {

@@ -66,7 +66,8 @@ const findProductByString = async (name, limit = null, city = null) => {
       .lean();
 
     if (locationDoc) {
-      query.location = locationDoc._id;
+      // Important: Handle the case where no matching location is found.
+      query.location = locationDoc._id; // Query by the _id of the found location document.
     } else {
       // Handle the case where location is not found, e.g., return empty array or throw error
       console.log(`Location "${city}" not found.`);
@@ -88,7 +89,6 @@ const findProductByString = async (name, limit = null, city = null) => {
   console.log(products);
   return products;
 };
-
 module.exports = {
   getAllProductByUserId,
   insertProduct,

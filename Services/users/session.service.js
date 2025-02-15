@@ -4,13 +4,13 @@ const { AppError } = require("../../utils/error");
 const { logger } = require("../../utils/logger");
 const { GeneralResponse } = require("../../utils/response");
 
-const addMessage = async (data, sessionId, userId) => {
+const addMessage = async (data, sessionId, userId, userType) => {
   try {
     await sessionRepository.addMessageBySessionId(data, sessionId);
 
     const chatbotResponse = await queryChatbot({
       query: data.message,
-      userType: "Consumer",
+      userType: userType == "admin" ? "Producer" : "Consumer",
       userId: userId,
     });
 
