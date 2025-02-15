@@ -3,7 +3,7 @@ const { AppError } = require("../../utils/error.js");
 const { GeneralResponse } = require("../../utils/response.js");
 const userRepository = require("../../Repository/auth/user.repository.js");
 
-module.exports.handleLogin = async (email, password, type) => {
+module.exports.handleLogin = async (email, password) => {
   try {
     const user = await userRepository.getUserByEmail(email);
 
@@ -14,8 +14,9 @@ module.exports.handleLogin = async (email, password, type) => {
     if (user.password !== password) {
       return new GeneralResponse(false, null, 402, "Password Does Not Match");
     }
+    // console.log(user);
     const data = {
-      token: createJWT(user.email, user._id, type),
+      token: createJWT(user.email, user._id, user.userType),
     };
     return new GeneralResponse(true, data, 200, "User Login Successfully");
   } catch (error) {
@@ -29,7 +30,8 @@ module.exports.handleCreateUser = async (
   email,
   password,
   rePassword,
-  phone_no
+  phone_no,
+  userType
 ) => {
   try {
     if (await userRepository.userExists(email)) {
@@ -43,9 +45,15 @@ module.exports.handleCreateUser = async (
         "Password and Re-password doesnt match"
       );
     }
-    await userRepository.createUser(name, email, password, phone_no);
+    const response = await userRepository.createUser(
+      name,
+      email,
+      password,
+      phone_no,
+      userType
+    );
     const data = {
-      token: createJWT(email),
+      token: createJWT(response.email, response._id, response.userType),
     };
     return new GeneralResponse(true, data, 200, "User Created Successfully");
   } catch (error) {

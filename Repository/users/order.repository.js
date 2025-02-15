@@ -43,7 +43,7 @@ const getAllOrder = async () => {
       },
     })
     .select("product_id")
-    .select("quantity")
+    .select("quantity status")
     .exec();
 };
 
@@ -75,9 +75,40 @@ const getAllOrdersByUserSell = async (userId) => {
     .exec();
 };
 
+const getAllOrderedStatusList = async (userId) => {
+  return await order.find({ buyer_id: userId, status: "requested" }).exec();
+};
+
+const getAllAcceptedStatusList = async (userId) => {
+  return await order.find({ buyer_id: userId, status: "accepted" }).exec();
+};
+
+const getAllRejectedStatusList = async (userId) => {
+  return await order.find({ buyer_id: userId, status: "rejected" }).exec();
+};
+
+const getAllDeliveredStatusList = async (userId) => {
+  return await order.find({ buyer_id: userId, status: "delivered" }).exec();
+};
+
+const changeTheStatus = async (orderId, status) => {
+  return await order
+    .findOneAndUpdate(
+      { _id: orderId },
+      { $set: { status: status } },
+      { new: true }
+    )
+    .exec();
+};
+
 module.exports = {
   addOrder,
   getAllOrder,
   getAllOrdersByUserBuy,
   getAllOrdersByUserSell,
+  getAllOrderedStatusList,
+  getAllAcceptedStatusList,
+  getAllRejectedStatusList,
+  getAllDeliveredStatusList,
+  changeTheStatus,
 };

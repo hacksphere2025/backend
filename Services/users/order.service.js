@@ -10,7 +10,6 @@ const handleAddOrder = async (data, id) => {
   try {
     data.buyer_id = id;
     const seller = await productRepository.getUserByProductId(data.product_id);
-    // console.log(seller);
     data.seller_id = seller.seller_id;
     const orderDTO = new CreateOrderDTO(data);
     const response = await orderRepository.addOrder(orderDTO);
@@ -66,10 +65,66 @@ const handleOrderAllItemsByUser = async (userId) => {
     return new AppError(500, "Error during Order Items");
   }
 };
+
+const handleGetAllOrderedStatusList = async (userId) => {
+  try {
+    const data = await orderRepository.getAllOrderedStatusList(userId);
+    return new GeneralResponse(true, data, 200, "Fetched Order Successfully");
+  } catch (error) {
+    console.error(error);
+    return new AppError(500, "Error during order fetch.");
+  }
+};
+
+const handleGetAllDeliveredStatusList = async (userId) => {
+  try {
+    const data = await orderRepository.getAllDeliveredStatusList(userId);
+    return new GeneralResponse(true, data, 200, "Fetched Order Successfully");
+  } catch (error) {
+    console.error(error);
+    return new AppError(500, "Error during order fetch.");
+  }
+};
+
+const handleGetAllAcceptedStatusList = async (userId) => {
+  try {
+    const data = await orderRepository.getAllAcceptedStatusList(userId);
+    return new GeneralResponse(true, data, 200, "Fetched Order Successfully");
+  } catch (error) {
+    console.error(error);
+    return new AppError(500, "Error during order fetch.");
+  }
+};
+
+const handleGetAllRejectedStatusList = async (userId) => {
+  try {
+    const data = await orderRepository.getAllRejectedStatusList(userId);
+    return new GeneralResponse(true, data, 200, "Fetched Order Successfully");
+  } catch (error) {
+    console.error(error);
+    return new AppError(500, "Error during order fetch.");
+  }
+};
+
+const handleChangeTheStatus = async (orderId, status) => {
+  try {
+    const data = await orderRepository.changeTheStatus(orderId, status);
+    return new GeneralResponse(true, data, 200, "Order Status Updated");
+  } catch (error) {
+    console.error(error);
+    return new AppError(500, "Error during order status change.");
+  }
+};
+
 module.exports = {
   handleAddOrder,
+  handleChangeTheStatus,
   handleGetAllOrder,
   handleGetAllOrdersByUserBuy,
   handleGetAllOrdersByUserSell,
   handleOrderAllItemsByUser,
+  handleGetAllOrderedStatusList,
+  handleGetAllDeliveredStatusList,
+  handleGetAllAcceptedStatusList,
+  handleGetAllRejectedStatusList,
 };

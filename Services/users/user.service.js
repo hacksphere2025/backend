@@ -12,14 +12,9 @@ module.exports.updateLocation = async (email, latitude, longtitude) => {
   }
 };
 
-module.exports.getUserDetails = async (id, type) => {
+module.exports.getUserDetails = async (id) => {
   try {
     let response = await userRepository.getuserById(id);
-    // response["loginType"] = type;
-    response = {
-      ...response._doc,
-      loginType: type,
-    };
     return new GeneralResponse(
       true,
       response,

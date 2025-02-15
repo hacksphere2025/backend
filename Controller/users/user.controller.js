@@ -24,8 +24,7 @@ const updateUserLocation = async (req, res) => {
 const getUserDetails = async (req, res) => {
   try {
     const id = req.user.id;
-    const type = req.user.type;
-    const response = await userService.getUserDetails(id, type);
+    const response = await userService.getUserDetails(id);
     return res.status(response.statusCode).json(response);
   } catch (error) {
     console.error(error);

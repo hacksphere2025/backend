@@ -15,6 +15,11 @@ const orderSchema = new mongoose.Schema({
     ref: "Location",
     required: true,
   },
+  status: {
+    type: String,
+    enum: ["requested", "rejected", "accepted", "pending", "delivered"],
+    default: "requested",
+  },
   seller_id: { type: SchemaTypes.ObjectId, ref: "User", required: true },
   buyer_id: { type: SchemaTypes.ObjectId, ref: "User", required: true },
 });

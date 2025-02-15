@@ -52,10 +52,77 @@ const orderAllItemByUser = async (req, res) => {
     return req.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+const getAllOrderedStatusList = async (req, res) => {
+  try {
+    const response = await orderService.handleGetAllOrderedStatusList(
+      req.user.id
+    );
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+const getAllDeliveredStatusList = async (req, res) => {
+  try {
+    const response = await orderService.handleGetAllDeliveredStatusList(
+      req.user.id
+    );
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+const getAllAcceptedStatusList = async (req, res) => {
+  try {
+    const response = await orderService.handleGetAllAcceptedStatusList(
+      req.user.id
+    );
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+const getAllRejectedStatusList = async (req, res) => {
+  try {
+    const response = await orderService.handleGetAllRejectedStatusList(
+      req.user.id
+    );
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+const changeTheStatus = async (req, res) => {
+  try {
+    const response = await orderService.handleChangeTheStatus(
+      req.body.id,
+      req.body.status
+    );
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   addOrderController,
   getAllOrderController,
   getAllOrdersByUserBuyController,
   getAllOrdersByUserSellController,
   orderAllItemByUser,
+  getAllOrderedStatusList,
+  getAllDeliveredStatusList,
+  getAllAcceptedStatusList,
+  getAllRejectedStatusList,
+  changeTheStatus,
 };

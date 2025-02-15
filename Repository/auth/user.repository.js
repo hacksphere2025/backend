@@ -1,11 +1,12 @@
 const { user } = require("../../Models/authModels/user.model");
 
-exports.createUser = async (name, email, password, phone_no) => {
+exports.createUser = async (name, email, password, phone_no, userType) => {
   const newUser = new user({
     name,
     email,
     password,
     phone_no,
+    userType,
   });
   return await newUser.save();
 };
@@ -20,7 +21,7 @@ exports.updateUserLocation = async (email, latitude, longitude) => {
     {
       email: email,
     },
-    { $set: { latitude: latitude, longitude: longitude } },
+    { $set: { latitude: latitude, longitude: longitude } }
   );
 };
 

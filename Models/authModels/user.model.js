@@ -15,16 +15,16 @@ const userSchema = mongoose.Schema({
     type: String,
     require: true,
   },
+  userType: {
+    type: String,
+    require: true,
+    enum: ["user", "admin"],
+    default: "user",
+  },
   phone_no: {
     type: Number,
     require: true,
   },
-  products: [
-    {
-      type: SchemaTypes.ObjectId,
-      ref: "Product",
-    },
-  ],
   cart: [
     {
       type: SchemaTypes.ObjectId,
@@ -35,6 +35,12 @@ const userSchema = mongoose.Schema({
     {
       type: SchemaTypes.ObjectId,
       ref: "Location",
+    },
+  ],
+  products: [
+    {
+      type: SchemaTypes.ObjectId,
+      ref: "Product",
     },
   ],
   order: [{ type: SchemaTypes.ObjectId, ref: "Order" }],

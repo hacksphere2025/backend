@@ -6,6 +6,7 @@
  * @property {string} unit
  * @property {Types.ObjectId} seller_id
  * @property {Types.ObjectId} buyer_id
+ * @property {string} status
  */
 
 /**
@@ -15,7 +16,7 @@
  * @property {string} seller_id
  * @property {string} buyer_id
  * @property {string} location
- *
+ * @property {string} status
  */
 
 /**
@@ -25,6 +26,7 @@
  * @property {string} [unit]
  * @property {Types.ObjectId} [seller_id]
  * @property {Types.ObjectId} [buyer_id]
+ * @property {string} [status]
  */
 
 class CreateOrderDTO {
@@ -37,6 +39,7 @@ class CreateOrderDTO {
     this.buyer_id = data.buyer_id;
     this.seller_id = data.seller_id;
     this.location = data.location;
+    this.status = data.status;
   }
 }
 
@@ -50,6 +53,7 @@ class UpdateOrderDTO {
     this.buyer_id = data.buyer_id;
     this.seller_id = data.seller_id;
     this.location = data.location;
+    this.status = data.status;
   }
 }
 

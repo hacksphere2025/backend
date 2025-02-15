@@ -33,6 +33,11 @@ const insertProduct = async (data) => {
   });
 };
 
+const updateProductByUserId = async (data) => {
+  const { _id, ...updateData } = data;
+  return await product.findByIdAndUpdate(_id, updateData);
+};
+
 const findProductByString = async (name, limit = null, city = null) => {
   let query = {};
 
@@ -61,8 +66,7 @@ const findProductByString = async (name, limit = null, city = null) => {
       .lean();
 
     if (locationDoc) {
-      // Important: Handle the case where no matching location is found.
-      query.location = locationDoc._id; // Query by the _id of the found location document.
+      query.location = locationDoc._id;
     } else {
       // Handle the case where location is not found, e.g., return empty array or throw error
       console.log(`Location "${city}" not found.`);
@@ -91,4 +95,5 @@ module.exports = {
   getAllProduct,
   findProductByString,
   getUserByProductId,
+  updateProductByUserId,
 };
