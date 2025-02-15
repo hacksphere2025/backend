@@ -16,7 +16,7 @@ orderRouter.get(
   authMiddleware,
   orderController.getAllOrdersByUserSellController
 );
-orderRouter.get("/buyAll", authMiddleware, orderController.orderAllItemByUser);
+// orderRouter.get("/buyAll", authMiddleware, orderController.orderAllItemByUser);
 orderRouter.get(
   "/status/requested",
   authMiddleware,
@@ -36,6 +36,12 @@ orderRouter.get(
   "/status/delivered",
   authMiddleware,
   orderController.getAllDeliveredStatusList
+);
+
+orderRouter.get(
+  "/addAllCart",
+  authMiddleware,
+  orderController.addOrderFromCart
 );
 
 orderRouter.put("/update", authMiddleware, orderController.changeTheStatus);

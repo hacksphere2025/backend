@@ -114,6 +114,17 @@ const changeTheStatus = async (req, res) => {
   }
 };
 
+const addOrderFromCart = async (req, res) => {
+  try {
+    const user = req.user.id;
+    const response = await orderService.handleAddOrderFromCart(user, req.body.location);
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   addOrderController,
   getAllOrderController,
@@ -125,4 +136,5 @@ module.exports = {
   getAllAcceptedStatusList,
   getAllRejectedStatusList,
   changeTheStatus,
+  addOrderFromCart,
 };

@@ -3,10 +3,10 @@ const cartService = require("../../Services/users/cart.service");
 
 const createCart = async (req, res) => {
   try {
-    const email = req.user.email;
+    const id = req.user.id;
     const cartDTO = new CreateCartDTO({
       ...req.body,
-      user: email,
+      user: id,
     });
     console.log(cartDTO);
     const data = await cartService.handleCreateCart(cartDTO);

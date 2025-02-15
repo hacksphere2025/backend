@@ -116,6 +116,30 @@ const handleChangeTheStatus = async (orderId, status) => {
   }
 };
 
+const handleAddOrderFromCart = async (userId, location) => {
+  try {
+    const userDetails = await cartRepository.getAllCartById(userId);
+    // console.log(userDetails);
+    // console.log(location);
+    for (const item of userDetails) {
+      const data = {
+        buyer_id: userId,
+        product_id: item.product_id._id,
+        quantity: item.quantity,
+        location: location,
+        seller_id:item.product_id.seller_id,
+      };
+      const orderDTO = new CreateOrderDTO(data);
+      await orderRepository.addOrder(orderDTO);
+    }
+    await cartRepository.clearAllProducts(userId);
+    return new GeneralResponse(true, null, 200, "Order Created Successfully");
+  } catch (error) {
+    console.error(error);
+    return new AppError(500, "Error during order creation.");
+  }
+};
+
 module.exports = {
   handleAddOrder,
   handleChangeTheStatus,
@@ -127,4 +151,5 @@ module.exports = {
   handleGetAllDeliveredStatusList,
   handleGetAllAcceptedStatusList,
   handleGetAllRejectedStatusList,
+  handleAddOrderFromCart,
 };
