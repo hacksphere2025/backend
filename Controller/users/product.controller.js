@@ -4,7 +4,7 @@ const productService = require("../../Services/users/product.service");
 const createProduct = async (req, res) => {
   try {
     const id = req.user.id;
-    console.log(req.body);
+    // console.log(req.body);
     const productDTO = new CreateProductDTO({
       ...req.body,
       seller_id: id,

@@ -12,7 +12,7 @@ app.use(express.json());
 
 mongoose
   .connect(process.env.MONGO_URI, {
-    dbName: process.env.MONGO_DB,  
+    dbName: process.env.MONGO_DB,
   })
   .then(() => {
     console.log("Connected to MongoDB");

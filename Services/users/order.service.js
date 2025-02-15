@@ -1,15 +1,16 @@
 const orderRepository = require("../../Repository/users/order.repository");
 const { AppError } = require("../../utils/error");
 const productRepository = require("../../Repository/users/product.repository");
-
+const cartRepository = require("../../Repository/users/cart.repository");
 const { GeneralResponse } = require("../../utils/response");
 const { CreateOrderDTO } = require("../../dtos/users/order.dtos");
+// const { order } = require("../../Models/userModels/order.models");
 
 const handleAddOrder = async (data, id) => {
   try {
     data.buyer_id = id;
     const seller = await productRepository.getUserByProductId(data.product_id);
-    console.log(seller);
+    // console.log(seller);
     data.seller_id = seller.seller_id;
     const orderDTO = new CreateOrderDTO(data);
     const response = await orderRepository.addOrder(orderDTO);
@@ -55,9 +56,20 @@ const handleGetAllOrdersByUserSell = async (userId) => {
   }
 };
 
+const handleOrderAllItemsByUser = async (userId) => {
+  try {
+    const userDetails = await cartRepository.getAllCartByEmailId(userId);
+    console.log(userDetails);
+    return new GeneralResponse(true, null, 200, "Order All Items In the cart");
+  } catch (error) {
+    console.error(error);
+    return new AppError(500, "Error during Order Items");
+  }
+};
 module.exports = {
   handleAddOrder,
   handleGetAllOrder,
   handleGetAllOrdersByUserBuy,
   handleGetAllOrdersByUserSell,
+  handleOrderAllItemsByUser,
 };

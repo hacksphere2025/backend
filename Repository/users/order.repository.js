@@ -7,7 +7,7 @@ const addOrder = async (data) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
-    console.log(data);
+    // console.log(data);
     const newOrder = new order(data);
     await newOrder.save();
     await user.findOneAndUpdate(
@@ -16,9 +16,10 @@ const addOrder = async (data) => {
         $push: { order: newOrder._id },
       }
     );
-
+    // console.log(data.quantity);
+    // console.log(data.product_id);
     await product.findOneAndUpdate(
-      { _id: data.buy_product },
+      { _id: data.product_id },
       {
         $inc: { sold_qty: data.quantity },
       }
@@ -67,8 +68,8 @@ const getAllOrdersByUserBuy = async (userId) => {
 const getAllOrdersByUserSell = async (userId) => {
   return await order
     .find({ seller_id: userId })
-    .populate("product_id",'name')
-    .populate("buyer_id","name email")
+    .populate("product_id", "name")
+    .populate("buyer_id", "name email")
     .populate("location", "location address city state pincode")
     .populate("seller_id", "name email")
     .exec();

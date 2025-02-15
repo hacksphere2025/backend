@@ -12,11 +12,15 @@ const getAllCart = async () => {
 };
 
 const getAllCartByEmailId = async (id) => {
-  return await cart.find({ user: id }).select('-__v -user');
+  return await cart.find({ user: id }).select("-__v -user");
 };
 
+const getAllCartByUser = async (id) => {
+  return await cart.findById(id);
+};
 module.exports = {
   createCart,
   getAllCart,
   getAllCartByEmailId,
+  getAllCartByUser,
 };

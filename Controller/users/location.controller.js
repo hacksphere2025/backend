@@ -30,8 +30,9 @@ const getAllLocation = async (req, res) => {
 
 const getLocationById = async (req, res) => {
   try {
-    const locationIdDTO = new AddressIdDTO(req.body);
-    const location = await locationService.getLocationById(locationIdDTO);
+    const id = req.user.id;
+    // const locationIdDTO = new AddressIdDTO(id);
+    const location = await locationService.getLocationById(id);
     return res.status(location.statusCode).json(location);
   } catch (error) {
     console.error(error);

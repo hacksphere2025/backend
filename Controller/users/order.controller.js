@@ -1,8 +1,8 @@
-const orderService = require('../../Services/users/order.service');
+const orderService = require("../../Services/users/order.service");
 
 const addOrderController = async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const id = req.user.id;
     const data = await orderService.handleAddOrder(req.body, id);
     return res.status(data.statusCode).json(data);
@@ -42,9 +42,20 @@ const getAllOrdersByUserSellController = async (req, res) => {
   }
 };
 
+const orderAllItemByUser = async (req, res) => {
+  try {
+    const user = req.user.id;
+    const response = await orderService.handleOrderAllItemsByUser(user);
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    return req.status(500).json({ message: "Internal Server Error" });
+  }
+};
 module.exports = {
   addOrderController,
   getAllOrderController,
   getAllOrdersByUserBuyController,
   getAllOrdersByUserSellController,
+  orderAllItemByUser,
 };
