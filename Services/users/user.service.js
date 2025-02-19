@@ -12,10 +12,9 @@ module.exports.updateLocation = async (email, latitude, longtitude) => {
   }
 };
 
-module.exports.getUserDetails = async (email) => {
+module.exports.getUserDetails = async (id) => {
   try {
-    const response = await userRepository.getuserById(email);
-    
+    let response = await userRepository.getuserById(id);
     return new GeneralResponse(
       true,
       response,

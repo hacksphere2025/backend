@@ -16,10 +16,6 @@ const productSchema = mongoose.Schema({
     required: true,
     min: 1,
   },
-  unit: {
-    type: String,
-    required: true,
-  },
   price: {
     type: Number,
     required: true,
@@ -46,6 +42,10 @@ const productSchema = mongoose.Schema({
     type: SchemaTypes.ObjectId,
     ref: "Location",
     required: true,
+  },
+  sold_qty: {
+    type: Number,
+    default: 0,
   },
 });
 

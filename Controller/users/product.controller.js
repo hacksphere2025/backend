@@ -1,13 +1,16 @@
-const { CreateProductDTO } = require("../../dtos/users/product.dtos");
+const {
+  CreateProductDTO,
+  UpdateProductDTO,
+} = require("../../dtos/users/product.dtos");
 const productService = require("../../Services/users/product.service");
 
 const createProduct = async (req, res) => {
   try {
-    const email = req.user.email;
-    console.log(req.body);
+    const id = req.user.id;
+    // console.log(req.body);
     const productDTO = new CreateProductDTO({
       ...req.body,
-      seller_id: email,
+      seller_id: id,
     });
     console.log(productDTO);
     const data = await productService.createProduct(productDTO);
@@ -28,10 +31,25 @@ const getAllProducts = async (req, res) => {
   }
 };
 
-const getAllProductsByEmailId = async (req, res) => {
+const getAllProductsByUserId = async (req, res) => {
   try {
-    const email = req.user.email;
-    const data = await productService.getAllProductsByEmailId(email);
+    const data = await productService.getAllProductsByUserId(req.user.id);
+    return res.status(data.statusCode).json(data);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+const updateProductByUser = async (req, res) => {
+  try {
+    const id = req.query.id;
+    const productDTO = new UpdateProductDTO({
+      _id: id,
+      ...req.body,
+      seller_id: id,
+    });
+    const data = await productService.updateProductByUserId(productDTO);
     return res.status(data.statusCode).json(data);
   } catch (error) {
     console.error(error);
@@ -42,5 +60,6 @@ const getAllProductsByEmailId = async (req, res) => {
 module.exports = {
   getAllProducts,
   createProduct,
-  getAllProductsByEmailId,
+  getAllProductsByUserId,
+  updateProductByUser,
 };

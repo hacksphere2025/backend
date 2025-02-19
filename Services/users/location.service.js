@@ -8,7 +8,7 @@ module.exports.createLocation = async (dto) => {
     return new GeneralResponse(
       true,
       null,
-      201,
+      200,
       "Location created successfully",
     );
   } catch (error) {
@@ -44,5 +44,15 @@ module.exports.getLocationById = async (dto) => {
   } catch (error) {
     console.log(error);
     throw new AppError(500, "Error during fetching location");
+  }
+};
+
+module.exports.deleteLocationById = async (dto) => {
+  try {
+    const location = await locationRepository.deleteLocation(dto);
+    return new GeneralResponse(true, location, 200, "Delete Location");
+  } catch (error) {
+    console.log(error);
+    throw new AppError(500, "Error during deleting location");
   }
 };

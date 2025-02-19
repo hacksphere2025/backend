@@ -17,6 +17,10 @@ const cartSchema = mongoose.Schema({
     ref: "User",
     required: true,
   },
+  isOrdered: {
+    type: SchemaTypes.Boolean,
+    default: false,
+  },
 });
 
 const cart = mongoose.model("Cart", cartSchema);

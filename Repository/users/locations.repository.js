@@ -14,8 +14,16 @@ exports.getLocationById = async (id) => {
 };
 
 exports.getAllLocationByUserId = async (id) => {
-  console.log(id)
-  const data = await location.find({ userId: id._id });
+  console.log(id);
+  const data = await location.find({ userId: id._id, isDeleted: false });
   console.log(data);
   return data;
+};
+
+exports.deleteLocation = async (id) => {
+  await location.updateOne(
+    { _id: id.id, userId: id.user_id },
+    { $set: { isDeleted: true } },
+  );
+  return true;
 };

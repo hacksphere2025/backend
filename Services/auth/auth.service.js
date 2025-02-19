@@ -14,8 +14,9 @@ module.exports.handleLogin = async (email, password) => {
     if (user.password !== password) {
       return new GeneralResponse(false, null, 402, "Password Does Not Match");
     }
+    // console.log(user);
     const data = {
-      token: createJWT(user.email, user._id),
+      token: createJWT(user.email, user._id, user.userType),
     };
     return new GeneralResponse(true, data, 200, "User Login Successfully");
   } catch (error) {
@@ -29,7 +30,8 @@ module.exports.handleCreateUser = async (
   email,
   password,
   rePassword,
-  phone_no
+  phone_no,
+  userType
 ) => {
   try {
     if (await userRepository.userExists(email)) {
@@ -43,9 +45,15 @@ module.exports.handleCreateUser = async (
         "Password and Re-password doesnt match"
       );
     }
-    await userRepository.createUser(name, email, password, phone_no);
+    const response = await userRepository.createUser(
+      name,
+      email,
+      password,
+      phone_no,
+      userType
+    );
     const data = {
-      token: createJWT(email),
+      token: createJWT(response.email, response._id, response.userType),
     };
     return new GeneralResponse(true, data, 200, "User Created Successfully");
   } catch (error) {
@@ -54,9 +62,13 @@ module.exports.handleCreateUser = async (
   }
 };
 
-const createJWT = (email,id) => {
-  const token = jwt.sign({ email: email, id: id }, process.env.JWT_SECRET, {
-    expiresIn: "1hr",
-  });
+const createJWT = (email, id, type) => {
+  const token = jwt.sign(
+    { email: email, id: id, type: type },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "1hr",
+    }
+  );
   return token;
 };

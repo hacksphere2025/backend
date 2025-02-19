@@ -1,11 +1,12 @@
 const { user } = require("../../Models/authModels/user.model");
 
-exports.createUser = async (name, email, password, phone_no) => {
+exports.createUser = async (name, email, password, phone_no, userType) => {
   const newUser = new user({
     name,
     email,
     password,
     phone_no,
+    userType,
   });
   return await newUser.save();
 };
@@ -28,16 +29,8 @@ exports.getUserByEmail = async (email) => {
   return await user.findOne({ email: email });
 };
 
-exports.getuserById = async (email) => {
+exports.getuserById = async (id) => {
   return await user
-    .findOne({ email: email })
-    // .populate("order")
-    .populate("cart",'-__v -user')
-    // .populate("products")
-    .select("-password -__v")
-    .exec();
-};
-exports.getUserIdByEmail = async (email) => {
-  const data = await user.findOne({ email: email });
-  return data._id.toString();
+    .findOne({ _id: id })
+    .select("-cart -order -products -__v -password -locations -session");
 };

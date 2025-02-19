@@ -1,6 +1,7 @@
 const { product } = require("../../Models/userModels/product.model");
-const { category } = require("../../Models/adminModels/category.model");
+const { category } = require("../../Models/userModels/category.model");
 const { user } = require("../../Models/authModels/user.model");
+const { location } = require("../../Models/userModels/location.model");
 
 const getAllProduct = async () => {
   return await product
@@ -10,8 +11,8 @@ const getAllProduct = async () => {
     .populate("location", "city state");
 };
 
-const getUserByProductId = async (product_id) => {
-  return await product.findById(product_id).select("seller_id");
+const getUserByProductId = async (id) => {
+  return await product.findById(id);
 };
 
 const getAllProductByUserId = async (seller_id) => {
@@ -32,54 +33,67 @@ const insertProduct = async (data) => {
   });
 };
 
-const findProductByString = async (name) => {
-  if (name == "") {
-    return await product
-      .find()
-      .populate("seller_id", "name")
-      .populate("category", "name")
-      .populate("location", "city name");
-  }
-  // Step 1: Find matching categories by text search
-  const matchingCategories = await category
-    .find({ $text: { $search: name } })
-    .select("_id");
-
-  // Extract category IDs
-  const categoryIds = matchingCategories.map((category) => category._id);
-
-  // Step 2: Find products by text search on product name
-  const productsByName = await product.find({ $text: { $search: name } });
-
-  // Step 3: Find products that belong to matched categories
-  const productsByCategory = await product.find({
-    category: { $in: categoryIds },
-  });
-
-  // Step 4: Store unique products in a Set (using _id to avoid duplicates)
-  const productSet = new Map();
-
-  [...productsByName, ...productsByCategory].forEach((p) => {
-    productSet.set(p._id.toString(), p);
-  });
-
-  // Convert Map values to an array and populate necessary fields
-  const uniqueProducts = await product.populate(
-    [...productSet.values()],
-    [
-      { path: "seller_id", select: "name" },
-      { path: "category", select: "name" },
-      { path: "location", select: "city state" },
-    ],
-  );
-  console.log(uniqueProducts);
-  return uniqueProducts;
+const updateProductByUserId = async (data) => {
+  const { _id, ...updateData } = data;
+  return await product.findByIdAndUpdate(_id, updateData);
 };
 
+const findProductByString = async (name, limit = null, city = null) => {
+  let query = {};
+
+  if (name) {
+    // Simplified condition
+    const matchingCategories = await category
+      .find({ $text: { $search: name } })
+      .select("_id")
+      .lean();
+
+    const categoryIds = matchingCategories.map((cat) => cat._id); // Shorter variable name
+
+    query.$or = [
+      { $text: { $search: name } },
+      { category: { $in: categoryIds } },
+    ];
+  }
+
+  if (city) {
+    // 1. Find the location document by city name:
+
+    const locationDoc = await location
+      .findOne({
+        $text: { $search: city },
+      })
+      .lean();
+
+    if (locationDoc) {
+      // Important: Handle the case where no matching location is found.
+      query.location = locationDoc._id; // Query by the _id of the found location document.
+    } else {
+      // Handle the case where location is not found, e.g., return empty array or throw error
+      console.log(`Location "${city}" not found.`);
+      return []; // Or throw an error if appropriate.
+    }
+  }
+
+  let products = await product
+    .find(query)
+    .populate("seller_id", "name")
+    .populate("category", "name")
+    .populate("location", "city state") // Keep this for the *result*
+    .lean();
+
+  if (limit) {
+    products = products.slice(0, parseInt(limit));
+  }
+
+  console.log(products);
+  return products;
+};
 module.exports = {
   getAllProductByUserId,
   insertProduct,
   getAllProduct,
   findProductByString,
   getUserByProductId,
+  updateProductByUserId,
 };

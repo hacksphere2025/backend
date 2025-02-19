@@ -11,12 +11,24 @@ const getAllCart = async () => {
   return await cart.find({});
 };
 
-const getAllCartByEmailId = async (id) => {
-  return await cart.find({ user: id }).select('-__v -user');
+const getAllCartById = async (id) => {
+  return await cart
+    .find({ user: id })
+    .populate("product_id", "name price seller_id");
+};
+
+const getAllCartByUser = async (id) => {
+  return await cart.findById(id);
+};
+
+const clearAllProducts = async (id) => {
+  return await cart.findByIdAndDelete({ user: id });
 };
 
 module.exports = {
   createCart,
   getAllCart,
-  getAllCartByEmailId,
+  getAllCartById,
+  getAllCartByUser,
+  clearAllProducts,
 };

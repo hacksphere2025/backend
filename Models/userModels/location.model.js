@@ -31,6 +31,10 @@ const locationSchema = mongoose.Schema({
     lat: { type: SchemaTypes.String, required: true },
     lng: { type: SchemaTypes.String, required: true },
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const location = mongoose.model("Location", locationSchema);
